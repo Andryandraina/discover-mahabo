@@ -19,7 +19,8 @@ const styles = {
     padding: '20px',
     textAlign: 'center',
     borderBottom: `2px solid ${darkMode ? theme.colors.dark.secondary : theme.colors.light.secondary}`,
-    background: `linear-gradient(135deg, ${darkMode ? '#374151' : '#f8fafc'}, ${darkMode ? '#1f2937' : '#ffffff'})`
+    background: `linear-gradient(135deg, ${darkMode ? '#374151' : '#f8fafc'}, ${darkMode ? '#1f2937' : '#ffffff'})`,
+    animation: 'slideDown 0.8s ease-out'
   }),
   
   nav: {
@@ -40,14 +41,16 @@ const styles = {
     borderRadius: '8px',
     cursor: 'pointer',
     fontSize: '0.9rem',
-    transition: 'all 0.2s ease',
-    boxShadow: isActive ? '0 4px 12px rgba(0,0,0,0.15)' : 'none'
+    transition: 'all 0.3s ease',
+    boxShadow: isActive ? '0 4px 12px rgba(0,0,0,0.15)' : 'none',
+    transform: isActive ? 'translateY(-2px)' : 'none'
   }),
   
   section: {
     padding: '40px 20px',
     maxWidth: '900px',
-    margin: '0 auto'
+    margin: '0 auto',
+    animation: 'fadeIn 0.6s ease-out'
   },
   
   card: (darkMode) => ({
@@ -55,7 +58,9 @@ const styles = {
     padding: '20px',
     borderRadius: '12px',
     marginBottom: '20px',
-    boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
+    boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+    transition: 'all 0.3s ease',
+    cursor: 'pointer'
   }),
   
   grid: {
@@ -74,7 +79,9 @@ const styles = {
     alignItems: 'center',
     justifyContent: 'center',
     fontSize: '3rem',
-    marginBottom: '15px'
+    marginBottom: '15px',
+    background: `linear-gradient(135deg, ${darkMode ? '#374151' : '#f8fafc'}, ${darkMode ? '#1f2937' : '#ffffff'})`,
+    transition: 'transform 0.3s ease'
   }),
   
   themeButton: (darkMode) => ({
@@ -85,11 +92,14 @@ const styles = {
     backgroundColor: darkMode ? theme.colors.dark.primary : theme.colors.light.primary,
     color: darkMode ? '#000' : '#fff',
     border: 'none',
-    borderRadius: '8px',
+    borderRadius: '50%',
     cursor: 'pointer',
     fontSize: '1.2rem',
     boxShadow: '0 4px 12px rgba(0,0,0,0.2)',
-    zIndex: 1000
+    zIndex: 1000,
+    transition: 'all 0.3s ease',
+    width: '50px',
+    height: '50px'
   }),
   
   button: (darkMode) => ({
@@ -100,13 +110,60 @@ const styles = {
     borderRadius: '6px',
     cursor: 'pointer',
     fontSize: '1rem',
-    marginTop: '10px'
-  })
+    marginTop: '10px',
+    transition: 'all 0.3s ease'
+  }),
+
+  // Nouveaux styles pour le formulaire
+  form: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '15px',
+    marginTop: '20px'
+  },
+
+  input: (darkMode) => ({
+    padding: '12px',
+    border: `1px solid ${darkMode ? theme.colors.dark.secondary : theme.colors.light.secondary}`,
+    borderRadius: '6px',
+    backgroundColor: darkMode ? theme.colors.dark.secondary : theme.colors.light.bg,
+    color: darkMode ? theme.colors.dark.text : theme.colors.light.text,
+    fontSize: '1rem'
+  }),
+
+  textarea: (darkMode) => ({
+    padding: '12px',
+    border: `1px solid ${darkMode ? theme.colors.dark.secondary : theme.colors.light.secondary}`,
+    borderRadius: '6px',
+    backgroundColor: darkMode ? theme.colors.dark.secondary : theme.colors.light.bg,
+    color: darkMode ? theme.colors.dark.text : theme.colors.light.text,
+    fontSize: '1rem',
+    minHeight: '100px',
+    resize: 'vertical'
+  }),
+
+  // Styles pour les animations
+  '@keyframes slideDown': {
+    from: { transform: 'translateY(-50px)', opacity: 0 },
+    to: { transform: 'translateY(0)', opacity: 1 }
+  },
+
+  '@keyframes fadeIn': {
+    from: { opacity: 0, transform: 'translateY(20px)' },
+    to: { opacity: 1, transform: 'translateY(0)' }
+  }
 }
 
 function App() {
   const [darkMode, setDarkMode] = useState(false)
   const [activeSection, setActiveSection] = useState('accueil')
+  
+  // Nouveau state pour le formulaire
+  const [formData, setFormData] = useState({
+    nom: '',
+    email: '',
+    message: ''
+  })
 
   const sections = [
     { id: 'accueil', label: '🏠 Accueil' },
@@ -120,10 +177,10 @@ function App() {
   ]
 
   const tourismeData = [
-    { nom: 'Allée des Baobabs', description: 'Avenue légendaire des baobabs centenaires', emoji: '🌳' },
-    { nom: 'Réserve de Kirindy', description: 'Faune endémique et baobabs sacrés', emoji: '🐆' },
-    { nom: 'Fleuve Tsiribihina', description: 'Descente en pirogue traditionnelle', emoji: '🚣' },
-    { nom: 'Villages Sakalava', description: 'Immersion culturelle authentique', emoji: '🏘️' }
+    { nom: 'Allée des Baobabs', description: 'Avenue légendaire des baobabs centenaires', emoji: '🌳', image: 'https://images.unsplash.com/photo-1544735716-392fe2489ffa?w=300&h=200&fit=crop' },
+    { nom: 'Réserve de Kirindy', description: 'Faune endémique et baobabs sacrés', emoji: '🐆', image: 'https://images.unsplash.com/photo-1564760055775-d63b17a55c44?w=300&h=200&fit=crop' },
+    { nom: 'Fleuve Tsiribihina', description: 'Descente en pirogue traditionnelle', emoji: '🚣', image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=300&h=200&fit=crop' },
+    { nom: 'Villages Sakalava', description: 'Immersion culturelle authentique', emoji: '🏘️', image: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=300&h=200&fit=crop' }
   ]
 
   const gastronomieData = [
@@ -147,12 +204,32 @@ function App() {
     { nom: 'Fomba', description: 'Coutumes et traditions locales', emoji: '🏛️' }
   ]
 
+  // Fonction pour gérer les changements du formulaire
+  const handleInputChange = (e) => {
+    const { name, value } = e.target
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }))
+  }
+
+  // Fonction pour soumettre le formulaire
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    alert(`Merci ${formData.nom} ! Votre message a été envoyé.\nEmail: ${formData.email}\nMessage: ${formData.message}`)
+    setFormData({ nom: '', email: '', message: '' })
+  }
+
   const renderSection = () => {
     switch(activeSection) {
       case 'accueil':
         return (
           <div>
-            <div style={styles.card(darkMode)}>
+            <div 
+              style={styles.card(darkMode)}
+              onMouseEnter={(e) => e.target.style.transform = 'translateY(-5px)'}
+              onMouseLeave={(e) => e.target.style.transform = 'translateY(0)'}
+            >
               <h2 style={{fontSize: '2.5rem', marginBottom: '1rem', textAlign: 'center'}}>
                 🌳 Bienvenue à Mahabo 🌳
               </h2>
@@ -224,11 +301,43 @@ function App() {
             
             <div style={styles.grid}>
               {tourismeData.map((site, index) => (
-                <div key={index} style={styles.card(darkMode)}>
-                  <div style={styles.imageBox(darkMode)}>{site.emoji}</div>
+                <div 
+                  key={index} 
+                  style={styles.card(darkMode)}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = 'translateY(-10px)'
+                    e.currentTarget.style.boxShadow = '0 8px 25px rgba(0,0,0,0.15)'
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = 'translateY(0)'
+                    e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.1)'
+                  }}
+                >
+                  <div style={styles.imageBox(darkMode)}>
+                    {site.image ? (
+                      <img 
+                        src={site.image} 
+                        alt={site.nom}
+                        style={{
+                          width: '100%',
+                          height: '100%',
+                          objectFit: 'cover',
+                          borderRadius: '8px'
+                        }}
+                      />
+                    ) : (
+                      site.emoji
+                    )}
+                  </div>
                   <h3 style={{marginBottom: '10px'}}>{site.nom}</h3>
                   <p style={{lineHeight: '1.5'}}>{site.description}</p>
-                  <button style={styles.button(darkMode)}>En savoir plus</button>
+                  <button 
+                    style={styles.button(darkMode)}
+                    onMouseEnter={(e) => e.target.style.transform = 'scale(1.05)'}
+                    onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}
+                  >
+                    En savoir plus
+                  </button>
                 </div>
               ))}
             </div>
@@ -334,6 +443,42 @@ function App() {
               <p style={{lineHeight: '1.6', marginBottom: '2rem'}}>
                 Planifiez votre visite à Mahabo ou obtenez plus d'informations.
               </p>
+              
+              {/* Formulaire de contact fonctionnel */}
+              <div style={styles.card(darkMode)}>
+                <h3 style={{marginBottom: '1rem'}}>✉️ Nous contacter</h3>
+                <form onSubmit={handleSubmit} style={styles.form}>
+                  <input
+                    type="text"
+                    name="nom"
+                    placeholder="Votre nom"
+                    value={formData.nom}
+                    onChange={handleInputChange}
+                    style={styles.input(darkMode)}
+                    required
+                  />
+                  <input
+                    type="email"
+                    name="email"
+                    placeholder="Votre email"
+                    value={formData.email}
+                    onChange={handleInputChange}
+                    style={styles.input(darkMode)}
+                    required
+                  />
+                  <textarea
+                    name="message"
+                    placeholder="Votre message"
+                    value={formData.message}
+                    onChange={handleInputChange}
+                    style={styles.textarea(darkMode)}
+                    required
+                  />
+                  <button type="submit" style={styles.button(darkMode)}>
+                    Envoyer le message
+                  </button>
+                </form>
+              </div>
             </div>
             
             <div style={styles.grid}>
@@ -376,9 +521,45 @@ function App() {
 
   return (
     <div style={styles.container(darkMode)}>
+      {/* Styles CSS pour les animations */}
+      <style jsx="true">{`
+        @keyframes slideDown {
+          from {
+            transform: translateY(-50px);
+            opacity: 0;
+          }
+          to {
+            transform: translateY(0);
+            opacity: 1;
+          }
+        }
+        
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+            transform: translateY(20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        
+        .card-hover {
+          transition: all 0.3s ease;
+        }
+        
+        .card-hover:hover {
+          transform: translateY(-5px);
+          box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+      `}</style>
+
       <button 
         onClick={() => setDarkMode(!darkMode)}
         style={styles.themeButton(darkMode)}
+        onMouseEnter={(e) => e.target.style.transform = 'scale(1.1)'}
+        onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}
       >
         {darkMode ? '☀️' : '🌙'}
       </button>
@@ -398,6 +579,18 @@ function App() {
             key={section.id}
             onClick={() => setActiveSection(section.id)}
             style={styles.navButton(darkMode, activeSection === section.id)}
+            onMouseEnter={(e) => {
+              if (activeSection !== section.id) {
+                e.target.style.backgroundColor = darkMode ? theme.colors.dark.primary : theme.colors.light.primary
+                e.target.style.color = '#fff'
+              }
+            }}
+            onMouseLeave={(e) => {
+              if (activeSection !== section.id) {
+                e.target.style.backgroundColor = darkMode ? theme.colors.dark.secondary : theme.colors.light.secondary
+                e.target.style.color = darkMode ? theme.colors.dark.text : theme.colors.light.text
+              }
+            }}
           >
             {section.label}
           </button>
